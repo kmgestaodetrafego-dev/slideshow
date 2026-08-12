@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painel de Administração</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f9; color: #333; }
+    .card { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .badge { background: #28a745; color: white; padding: 5px 12px; border-radius: 20px; font-weight: bold; }
+    input[type="text"] { width: 75%; padding: 10px; margin-right: 2%; }
+    button { padding: 10px 15px; background: #007bff; color: white; border: none; cursor: pointer; border-radius: 4px; }
+    ul { list-style: none; padding: 0; margin-top: 20px; }
+    li { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #ddd; }
+    .btn-danger { background: #dc3545; }
+    img { height: 40px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Painel Administrativo</h2>
+    <p>Usuários conectados no momento: <span class="badge" id="user-count">0</span></p>
+
+    <hr style="margin: 20px 0;">
+
+    <h3>Adicionar Nova Imagem (URL)</h3>
+    <br>
+    <input type="text" id="img-url" placeholder="https://exemplo.com/imagem.jpg">
+    <button onclick="addImage()">Adicionar</button>
+
+    <ul id="image-list"></ul>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+
+    socket.on('userCountUpdate', (count) => {
+      document.getElementById('user-count').innerText = count;
+    });
+
+    socket.on('loadImages', (images) => {
+      const list = document.getElementById('image-list');
+      list.innerHTML = '';
+      images.forEach((url, index) => {
+        list.innerHTML += `
+          <li>
+            <img src="${url}" alt="thumb">
+            <button class="btn-danger" onclick="removeImage(${index})">Remover</button>
+          </li>
+        `;
+      });
+    });
+
+    function addImage() {
+      const input = document.getElementById('img-url');
+      if (input.value.trim() !== '') {
+        socket.emit('addImage', input.value);
+        input.value = '';
+      }
+    }
+
+    function removeImage(index) {
+      socket.emit('removeImage', index);
+    }
+  </script>
+</body>
+</html>
