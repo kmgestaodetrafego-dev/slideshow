@@ -29,7 +29,7 @@
       opacity: 1;
     }
 
-    /* Botão flutuante para o Admin */
+    /* Botão flutuante para acessar o Painel de Administração */
     .btn-admin {
       position: fixed;
       bottom: 20px;
@@ -45,11 +45,11 @@
       border: 1px solid rgba(255, 255, 255, 0.3);
       backdrop-filter: blur(5px);
       transition: all 0.3s ease;
-      opacity: 0.3; /* Fica semitransparente para não atrapalhar */
+      opacity: 0.3;
     }
 
     .btn-admin:hover {
-      opacity: 1; /* Ganha destaque ao passar o mouse */
+      opacity: 1;
       background-color: rgba(0, 0, 0, 0.85);
       border-color: #fff;
       transform: scale(1.05);
@@ -58,7 +58,6 @@
 </head>
 <body>
 
-  <!-- Botão que vai direto para o Admin -->
   <a href="/admin" class="btn-admin">⚙️ Painel Admin</a>
 
   <div class="slider-container" id="slider"></div>
@@ -93,7 +92,7 @@
             currentIndex = (currentIndex + 1) % slides.length;
             slides[currentIndex].classList.add('active');
           }
-        }, 5000);
+        }, 15000); // <-- Alterado para 15000ms (15 segundos)
       }
     });
   </script>
